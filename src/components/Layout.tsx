@@ -33,6 +33,10 @@ export default function Layout() {
 
       <div className="body">
         <aside className="sidebar">
+        <NavLink to="/exportar-importar" className="nav">
+  Respaldo
+</NavLink>
+
           <NavLink to="/" end className={({ isActive }) => isActive ? 'nav nav--active' : 'nav'}>Inicio</NavLink>
           <NavLink to="/insumos" className={({ isActive }) => isActive ? 'nav nav--active' : 'nav'}>Insumos</NavLink>
           <NavLink to="/pedidos" className={({ isActive }) => isActive ? 'nav nav--active' : 'nav'}>Pedidos</NavLink>

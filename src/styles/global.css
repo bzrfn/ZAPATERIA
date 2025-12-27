@@ -1534,4 +1534,69 @@ body.modal-open{
       display: table-cell !important;
     }
   }
+/* =========================
+   BACKUP / RESTORE
+   ========================= */
+
+   .backupGrid{
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+    margin-top: 10px;
+  }
   
+  @media (max-width: 900px){
+    .backupGrid{ grid-template-columns: 1fr; }
+  }
+  
+  .backupCard{
+    background: rgba(0,0,0,0.12);
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
+    padding: 14px;
+  }
+  
+  .backupTitle{
+    font-weight: 950;
+    margin-bottom: 10px;
+    letter-spacing: .01em;
+  }
+  
+  .backupStats{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+  
+  @media (max-width: 900px){
+    .backupStats{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  
+  .backupStat{
+    border: 1px solid var(--border-soft);
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .backupNum{
+    font-size: 26px;
+    font-weight: 950;
+    line-height: 1.1;
+  }
+  
+  .backupList{
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  .backupTextarea{
+    min-height: 260px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+  }
+    
