@@ -22,6 +22,15 @@ function safeNum(v: any, fallback = 0) {
   return Number.isFinite(n) ? n : fallback
 }
 
+function isValidImageDataUrl(x: any) {
+  if (typeof x !== 'string') return false
+  // ⚠️ blob: se rompe al recargar/importar respaldo
+  if (x.startsWith('blob:')) return false
+  if (x.startsWith('data:image/')) return true
+  if (x.startsWith('http://') || x.startsWith('https://')) return true
+  return false
+}
+
 export default function CatalogosPage() {
   const { state, dispatch } = useApp()
 
@@ -115,7 +124,6 @@ export default function CatalogosPage() {
       type: 'MODEL_UPDATE',
       id: modelId,
       payload: {
-        // OJO: si tu tipo se llama diferente (pairs / pares / stockPairs) ajusta aquí:
         pares: next,
       } as any,
     })
@@ -277,10 +285,13 @@ export default function CatalogosPage() {
               const draft = pairsDraft[m.id]
               const showVal = draft !== undefined ? draft : String(paresReal)
 
+              // ⚠️ Si por alguna razón se coló blob:, no lo mostramos (evita “imagen rota”)
+              const imgOk = isValidImageDataUrl(m.imageDataUrl)
+
               return (
                 <tr key={m.id}>
                   <td>
-                    {m.imageDataUrl ? (
+                    {imgOk ? (
                       <button
                         type="button"
                         className="thumbBtn"
@@ -456,7 +467,9 @@ function ModeloModal({
   async function pickImage(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]
     if (!f) return
-    const url = await fileToDataUrl(f)
+    // ✅ Importante: fileToDataUrl debe devolver data:image/... base64 (NO blob:)
+    // Usa compresión si tu util la soporta (el que te pasé)
+    const url = await fileToDataUrl(f, { maxW: 900, maxH: 900, quality: 0.82, maxKB: 300 } as any)
     setImageDataUrl(url)
   }
 
@@ -479,7 +492,9 @@ function ModeloModal({
                 nombre: nombre.trim(),
                 descripcion,
                 activo,
-                imageDataUrl,
+                imageDataUrl: isValidImageDataUrl(imageDataUrl) ? imageDataUrl : undefined,
+                // ✅ IMPORTANTÍSIMO: no perder pares al editar / y en alta default 0
+                pares: (edit as any)?.pares ?? 0,
               } as any)
             }
           >
@@ -528,7 +543,7 @@ function ModeloModal({
         <div>
           <div className="field">
             <div className="label">Preview</div>
-            {imageDataUrl ? (
+            {isValidImageDataUrl(imageDataUrl) ? (
               <>
                 <img src={imageDataUrl} alt="preview" className="previewBig" />
                 <div className="actions" style={{ marginTop: 10 }}>

@@ -7,8 +7,6 @@ import { loadState, saveState } from '../utils/storage'
 type Ctx = {
   state: AppState
   dispatch: React.Dispatch<Action>
-
-  // ✅ extra: respaldo manual (para “para siempre” sin BD)
   exportBackup: () => void
   importBackup: (file: File) => Promise<void>
   resetAll: () => void
@@ -16,33 +14,63 @@ type Ctx = {
 
 const AppCtx = createContext<Ctx | null>(null)
 
-/** =========================================================
- * ✅ Normalización / Migración:
- * - Evita pantalla en blanco si hay datos viejos en LocalStorage
- * - Asegura campos nuevos: lineas[].done, modelo.pares, checks[].notas, etc.
- * ========================================================= */
+function isValidImageDataUrl(x: any) {
+  if (typeof x !== 'string') return false
+  // ✅ Importante: NO guardamos blob: porque se rompe
+  if (x.startsWith('blob:')) return false
+  // data:image/... base64
+  if (x.startsWith('data:image/')) return true
+  // si en algún punto permites URL http(s), también vale:
+  if (x.startsWith('http://') || x.startsWith('https://')) return true
+  return false
+}
+
 function normalizeState(raw: any): AppState | null {
   if (!raw || typeof raw !== 'object') return null
 
   const base = initialState()
 
-  // Si falta algo clave, usa base para no romper
   const next: any = {
     ...base,
     ...raw,
   }
 
-  // --- supplies ---
   if (!Array.isArray(next.supplies)) next.supplies = []
 
-  // --- shoeModels ---
+  // -------------------------------
+  // ✅ shoeModels (CATÁLOGO) robusto
+  // -------------------------------
   if (!Array.isArray(next.shoeModels)) next.shoeModels = []
-  next.shoeModels = next.shoeModels.map((m: any) => ({
-    ...m,
-    // ✅ NUEVO: pares en catálogo (si no existe, 0)
-    pares: Number.isFinite(Number(m?.pares)) ? Number(m.pares) : 0,
-    activo: typeof m?.activo === 'boolean' ? m.activo : true,
-  }))
+  next.shoeModels = next.shoeModels.map((m: any) => {
+    // Soporta respaldos “raros” donde venga con llaves tipo Excel:
+    const codigo = (m?.codigo ?? m?.Codigo ?? m?.code ?? '').toString()
+    const nombre = (m?.nombre ?? m?.Nombre ?? m?.name ?? '').toString()
+
+    const paresRaw = m?.pares ?? m?.Pares ?? m?.pairs ?? 0
+    const pares = Number.isFinite(Number(paresRaw)) ? Number(paresRaw) : 0
+
+    const activoRaw = m?.activo ?? m?.Activo
+    const activo =
+      typeof activoRaw === 'boolean'
+        ? activoRaw
+        : typeof activoRaw === 'string'
+          ? activoRaw.toLowerCase() === 'sí' || activoRaw.toLowerCase() === 'si' || activoRaw.toLowerCase() === 'true'
+          : true
+
+    const image = m?.imageDataUrl ?? m?.imagen ?? m?.Imagen ?? m?.image
+    const imageDataUrl = isValidImageDataUrl(image) ? String(image) : undefined
+
+    return {
+      ...m,
+      codigo,
+      nombre,
+      pares,
+      activo,
+      imageDataUrl,
+      createdAt: m?.createdAt ?? m?.Creado ?? base.shoeModels?.[0]?.createdAt ?? new Date().toISOString(),
+      updatedAt: m?.updatedAt ?? m?.Actualizado ?? m?.createdAt ?? new Date().toISOString(),
+    }
+  })
 
   // --- orders + lineas.done ---
   if (!Array.isArray(next.orders)) next.orders = []
@@ -56,16 +84,12 @@ function normalizeState(raw: any): AppState | null {
           color: l?.color ?? '',
           suela: l?.suela ?? '',
           modelo: l?.modelo ?? '',
-          done: !!l?.done, // ✅ asegura boolean
+          done: !!l?.done,
         }))
       : [],
   }))
 
-  // =========================================================
-  // ✅ checks (control de personal) + notas
-  // - Si no existe, crea []
-  // - Si existen registros viejos, asegura shape + notas
-  // =========================================================
+  // ✅ checks
   if (!Array.isArray(next.checks)) next.checks = []
   next.checks = next.checks.map((c: any) => ({
     ...c,
@@ -73,14 +97,12 @@ function normalizeState(raw: any): AppState | null {
     empleadoNombre: String(c?.empleadoNombre ?? ''),
     tipo: c?.tipo === 'SALIDA' ? 'SALIDA' : 'ENTRADA',
     timestamp: String(c?.timestamp ?? new Date().toISOString()),
-    // ✅ notas opcional (si viene vacío o no existe, undefined)
     notas: typeof c?.notas === 'string' && c.notas.trim() ? c.notas.trim() : undefined,
   }))
 
   return next as AppState
 }
 
-// ✅ Init lazy: carga LocalStorage UNA sola vez
 function init(): AppState {
   try {
     const persisted = loadState<AppState>()
@@ -95,7 +117,6 @@ function init(): AppState {
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined as any, init)
 
-  // ✅ Debounce + idle save (evita freezes)
   const tRef = useRef<number | null>(null)
   const idleRef = useRef<number | null>(null)
 
@@ -109,9 +130,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     tRef.current = window.setTimeout(() => {
       if ('requestIdleCallback' in window) {
         idleRef.current = (window as any).requestIdleCallback(
-          () => {
-            saveState(state)
-          },
+          () => saveState(state),
           { timeout: 1200 }
         )
       } else {
@@ -127,9 +146,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state])
 
-  /** =========================================================
-   * ✅ Respaldo manual (para “para siempre” sin BD)
-   * ========================================================= */
   function exportBackup() {
     try {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })
@@ -154,8 +170,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         alert('Respaldo inválido.')
         return
       }
-
-      // ✅ Importar = reemplazar todo el estado
       dispatch({ type: 'STATE_REPLACE', payload: normalized } as any)
       alert('Respaldo importado correctamente.')
     } catch (e) {
@@ -168,7 +182,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const ok = window.confirm('¿Seguro? Esto borrará datos locales de este navegador.')
     if (!ok) return
     dispatch({ type: 'STATE_REPLACE', payload: initialState() } as any)
-    // Opcional: guarda inmediato
     saveState(initialState())
   }
 
