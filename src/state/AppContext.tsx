@@ -19,7 +19,7 @@ const AppCtx = createContext<Ctx | null>(null)
 /** =========================================================
  * ✅ Normalización / Migración:
  * - Evita pantalla en blanco si hay datos viejos en LocalStorage
- * - Asegura campos nuevos: lineas[].done, modelo.pares, etc.
+ * - Asegura campos nuevos: lineas[].done, modelo.pares, checks[].notas, etc.
  * ========================================================= */
 function normalizeState(raw: any): AppState | null {
   if (!raw || typeof raw !== 'object') return null
@@ -59,6 +59,22 @@ function normalizeState(raw: any): AppState | null {
           done: !!l?.done, // ✅ asegura boolean
         }))
       : [],
+  }))
+
+  // =========================================================
+  // ✅ checks (control de personal) + notas
+  // - Si no existe, crea []
+  // - Si existen registros viejos, asegura shape + notas
+  // =========================================================
+  if (!Array.isArray(next.checks)) next.checks = []
+  next.checks = next.checks.map((c: any) => ({
+    ...c,
+    id: c?.id ?? (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+    empleadoNombre: String(c?.empleadoNombre ?? ''),
+    tipo: c?.tipo === 'SALIDA' ? 'SALIDA' : 'ENTRADA',
+    timestamp: String(c?.timestamp ?? new Date().toISOString()),
+    // ✅ notas opcional (si viene vacío o no existe, undefined)
+    notas: typeof c?.notas === 'string' && c.notas.trim() ? c.notas.trim() : undefined,
   }))
 
   return next as AppState

@@ -1599,4 +1599,32 @@ body.modal-open{
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 12px;
   }
-    
+  .notesCell {
+    max-width: 320px;
+  }
+  
+  .notesText {
+    display: inline-block;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.25;
+  }
+  
+  .muted {
+    opacity: 0.6;
+  }
+  .notesCell {
+    max-width: 320px;
+  }
+  
+  .notesText {
+    display: inline-block;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.25;
+  }
+  
+  .muted {
+    opacity: 0.6;
+  }
+       

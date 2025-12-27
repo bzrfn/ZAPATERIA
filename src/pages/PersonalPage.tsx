@@ -14,13 +14,25 @@ export default function PersonalPage() {
     for (const c of state.checks) {
       by[c.empleadoNombre] = (by[c.empleadoNombre] ?? 0) + 1
     }
-    return Object.entries(by).sort((a,b) => b[1]-a[1])
+    return Object.entries(by).sort((a, b) => b[1] - a[1])
   }, [state.checks])
 
   function add() {
     const n = nombre.trim()
     if (!n) return
-    dispatch({ type: 'CHECK_ADD', payload: { empleadoNombre: n, tipo, timestamp: nowISO(), notas: notas.trim() || undefined } })
+
+    const notasTrim = notas.trim()
+
+    dispatch({
+      type: 'CHECK_ADD',
+      payload: {
+        empleadoNombre: n,
+        tipo,
+        timestamp: nowISO(),
+        notas: notasTrim ? notasTrim : undefined,
+      },
+    })
+
     setNombre('')
     setNotas('')
   }
@@ -30,33 +42,57 @@ export default function PersonalPage() {
     dispatch({ type: 'CHECK_DELETE', id })
   }
 
+  const checksSorted = useMemo(() => {
+    // Si quieres que lo más nuevo salga arriba:
+    return [...state.checks].sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+  }, [state.checks])
+
   return (
     <div className="row">
       <div className="col">
         <div className="card">
           <h2>Chequeo de personal</h2>
-          <div className="small">Registro de entrada y salida (fecha y hora). Ideal para piso de producción.</div>
+          <div className="small">
+            Registro de entrada y salida (fecha y hora). Ideal para piso de producción.
+          </div>
           <hr className="sep" />
 
           <div className="row">
             <div className="col">
               <div className="label">Empleado</div>
-              <input className="input" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del empleado" />
+              <input
+                className="input"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                placeholder="Nombre del empleado"
+              />
             </div>
             <div className="col">
               <div className="label">Tipo</div>
-              <select className="select" value={tipo} onChange={(e) => setTipo(e.target.value as any)}>
+              <select
+                className="select"
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value as any)}
+              >
                 <option value="ENTRADA">ENTRADA</option>
                 <option value="SALIDA">SALIDA</option>
               </select>
             </div>
           </div>
+
           <div className="field">
             <div className="label">Notas</div>
-            <input className="input" value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Opcional" />
+            <input
+              className="input"
+              value={notas}
+              onChange={(e) => setNotas(e.target.value)}
+              placeholder="Opcional"
+            />
           </div>
 
-          <button className="btn" onClick={add}>Registrar</button>
+          <button className="btn" onClick={add}>
+            Registrar
+          </button>
         </div>
 
         <div className="card" style={{ marginTop: 12 }}>
@@ -67,18 +103,35 @@ export default function PersonalPage() {
                 <th>Empleado</th>
                 <th>Tipo</th>
                 <th>Fecha/Hora</th>
+                <th>Notas</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {state.checks.map(c => (
+              {checksSorted.map((c) => (
                 <tr key={c.id}>
                   <td>{c.empleadoNombre}</td>
-                  <td><Badge tone={c.tipo === 'ENTRADA' ? 'good' : 'warn'}>{c.tipo}</Badge></td>
+                  <td>
+                    <Badge tone={c.tipo === 'ENTRADA' ? 'good' : 'warn'}>{c.tipo}</Badge>
+                  </td>
                   <td>{formatDT(c.timestamp)}</td>
-                  <td><button className="btn btn--danger" onClick={() => del(c.id)}>Eliminar</button></td>
+                  <td className="notesCell">
+                    {c.notas ? <span className="notesText">{c.notas}</span> : <span className="muted">—</span>}
+                  </td>
+                  <td>
+                    <button className="btn btn--danger" onClick={() => del(c.id)}>
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               ))}
+              {checksSorted.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="muted" style={{ padding: 12 }}>
+                    Sin registros.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

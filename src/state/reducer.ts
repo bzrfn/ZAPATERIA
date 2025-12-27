@@ -45,7 +45,18 @@ function normalizeAppState(next: any): AppState {
   safe.shoeModels = safe.shoeModels.map((m: any) => ({
     ...m,
     activo: typeof m?.activo === 'boolean' ? m.activo : true,
-    pares: Number.isFinite(Number(m?.pares)) ? Number(m.pares) : (m?.pares === 0 ? 0 : 0), // default 0
+    pares: Number.isFinite(Number(m?.pares)) ? Number(m.pares) : 0, // default 0
+  }))
+
+  // ✅ checks: asegura forma + notas
+  safe.checks = safe.checks.map((c: any) => ({
+    ...c,
+    id: c?.id ?? uuid(),
+    empleadoNombre: String(c?.empleadoNombre ?? ''),
+    tipo: c?.tipo === 'SALIDA' ? 'SALIDA' : 'ENTRADA',
+    timestamp: String(c?.timestamp ?? nowISO()),
+    // notas opcional y saneada
+    notas: typeof c?.notas === 'string' && c.notas.trim() ? c.notas.trim() : undefined,
   }))
 
   // orders: asegura asignaciones y lineas
@@ -137,7 +148,9 @@ export function reducer(state: AppState, action: Action): AppState {
     case 'MODEL_UPDATE':
       return {
         ...state,
-        shoeModels: state.shoeModels.map((m) => (m.id === action.id ? { ...m, ...action.payload, updatedAt: t } : m)),
+        shoeModels: state.shoeModels.map((m) =>
+          m.id === action.id ? { ...m, ...action.payload, updatedAt: t } : m
+        ),
       }
 
     case 'MODEL_DELETE': {
@@ -147,8 +160,21 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, shoeModels: state.shoeModels.filter((m) => m.id !== action.id) }
     }
 
-    case 'CHECK_ADD':
-      return { ...state, checks: [{ id: uuid(), ...action.payload }, ...state.checks] }
+    case 'CHECK_ADD': {
+      // ✅ refuerzo: sanea notas (aunque venga bien)
+      const payload = action.payload as any
+      const notas = typeof payload?.notas === 'string' && payload.notas.trim() ? payload.notas.trim() : undefined
+
+      const newCheck: CheckEvent = {
+        id: uuid(),
+        empleadoNombre: String(payload?.empleadoNombre ?? ''),
+        tipo: payload?.tipo === 'SALIDA' ? 'SALIDA' : 'ENTRADA',
+        timestamp: String(payload?.timestamp ?? t),
+        ...(notas ? { notas } : {}),
+      }
+
+      return { ...state, checks: [newCheck, ...state.checks] }
+    }
 
     case 'CHECK_DELETE':
       return { ...state, checks: state.checks.filter((c) => c.id !== action.id) }
