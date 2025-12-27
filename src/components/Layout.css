@@ -1,0 +1,128 @@
+/* =========================
+   Layout — ERP / Admin Pro
+   ========================= */
+
+   .layout{
+    min-height: 100vh;
+    display:flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 14px 18px;
+  
+    background:
+      linear-gradient(180deg, #ffffff, #f8fafc);
+    border-bottom: 1px solid var(--border);
+  
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  
+  .brand__title{
+    font-weight: 900;
+    letter-spacing: .02em;
+  }
+  .brand__subtitle{
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  
+  /* Usuario */
+  .userbox{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+  .userbox__meta{
+    text-align:right;
+  }
+  .userbox__name{
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .userbox__role{
+    color: var(--muted);
+    font-size: 12px;
+  }
+  
+  /* ---------- BODY ---------- */
+  .body{
+    display:flex;
+    flex:1;
+    min-height: 0;
+  }
+  
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    width: 240px;
+    padding: 14px;
+  
+    background: linear-gradient(180deg, #ffffff, #f9fafb);
+    border-right: 1px solid var(--border);
+  
+    display:flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  /* Navegación */
+  .nav{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  
+    padding: 10px 12px;
+    border-radius: 12px;
+  
+    font-weight: 700;
+    color: var(--text);
+    text-decoration:none;
+  
+    border: 1px solid transparent;
+    transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+  }
+  
+  .nav:hover{
+    background: rgba(0,0,0,0.04);
+  }
+  
+  .nav--active{
+    background: linear-gradient(180deg, rgba(37,99,235,0.14), rgba(37,99,235,0.08));
+    border-color: rgba(37,99,235,0.30);
+    color: #1e3a8a;
+  }
+  
+  /* ---------- CONTENT ---------- */
+  .content{
+    flex:1;
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px){
+    .body{
+      flex-direction: column;
+    }
+  
+    .sidebar{
+      width: 100%;
+      flex-direction: row;
+      overflow-x: auto;
+    }
+  
+    .nav{
+      white-space: nowrap;
+    }
+  }
+  

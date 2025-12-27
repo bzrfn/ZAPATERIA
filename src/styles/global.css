@@ -1,0 +1,1537 @@
+/* =========================================================
+   GLOBAL UI — Enterprise / ERP Style (Refinado)
+   Sin Tailwind · Consistente · Profesional
+   ========================================================= */
+
+   :root{
+    /* ---------- Base ---------- */
+    --bg: #0b1020;
+    --bg-soft: #101632;
+  
+    --surface: rgba(255,255,255,0.04);
+    --surface-strong: rgba(255,255,255,0.07);
+  
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+  
+    /* ---------- Brand + states ---------- */
+    --primary: #6366f1;   /* indigo */
+    --accent:  #22d3ee;   /* cyan */
+    --good:    #22c55e;
+    --warn:    #f59e0b;
+    --bad:     #ef4444;
+  
+    /* ---------- Borders / radius ---------- */
+    --border: rgba(255,255,255,0.14);
+    --border-soft: rgba(255,255,255,0.08);
+  
+    --r-sm: 12px;
+    --r:    16px;
+    --r-lg: 22px;
+  
+    /* ---------- Shadows ---------- */
+    --shadow-sm: 0 8px 18px rgba(0,0,0,0.35);
+    --shadow:    0 18px 50px rgba(0,0,0,0.45);
+    --shadow-lg: 0 30px 90px rgba(0,0,0,0.60);
+  
+    /* ---------- Focus ---------- */
+    --ring: 0 0 0 3px rgba(99,102,241,0.45);
+  
+    /* ---------- Motion ---------- */
+    --t: 160ms cubic-bezier(.2,.8,.2,1);
+  }
+  
+  /* ---------------------------------------------------------
+     RESET / BASE
+  --------------------------------------------------------- */
+  *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
+  
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    color: var(--text);
+    background:
+      radial-gradient(1200px 600px at 12% 10%, rgba(99,102,241,0.20), transparent 60%),
+      radial-gradient(900px 480px at 88% 18%, rgba(34,211,238,0.18), transparent 55%),
+      linear-gradient(180deg, var(--bg-soft), var(--bg));
+  }
+  
+  a{ color: inherit; text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  
+  /* ---------------------------------------------------------
+     TYPOGRAPHY
+  --------------------------------------------------------- */
+  h1,h2,h3{
+    margin:0 0 10px 0;
+    letter-spacing:-0.02em;
+  }
+  h1{ font-size: 28px; font-weight: 950; }
+  h2{ font-size: 20px; font-weight: 900; }
+  h3{ font-size: 16px; font-weight: 900; color: #c7d2fe; }
+  
+  .small{
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  
+  /* ---------------------------------------------------------
+     LAYOUT HELPERS
+  --------------------------------------------------------- */
+  .row{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .col{ flex:1; min-width: 280px; }
+  .actions{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
+  
+  hr.sep{
+    border:0;
+    border-top:1px solid var(--border-soft);
+    margin:14px 0;
+  }
+  
+  /* ---------------------------------------------------------
+     LAYOUT (topbar/sidebar/content)
+     (matches your layout.css classes)
+  --------------------------------------------------------- */
+  .layout{ min-height: 100vh; display:flex; flex-direction: column; }
+  
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 14px 18px;
+  
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border-bottom: 1px solid var(--border-soft);
+  
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .brand__title{ font-weight: 900; letter-spacing: .02em; }
+  .brand__subtitle{ color: var(--muted); font-size: 12px; margin-top: 2px; }
+  
+  .userbox{ display:flex; align-items:center; gap: 12px; }
+  .userbox__meta{ text-align:right; }
+  .userbox__name{ font-weight: 800; font-size: 13px; }
+  .userbox__role{ color: var(--muted); font-size: 12px; }
+  
+  .body{ display:flex; flex:1; min-height: 0; }
+  
+  /* --- Sidebar PRO (dark) --- */
+  .sidebar{
+    width: 240px;
+    padding: 14px;
+    display:flex;
+    flex-direction: column;
+    gap: 6px;
+  
+    background:
+      linear-gradient(180deg, rgba(15,23,42,0.92), rgba(2,6,23,0.95));
+    border-right: 1px solid rgba(255,255,255,0.12);
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+  }
+  
+  .nav{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  
+    padding: 10px 12px;
+    border-radius: 14px;
+  
+    font-weight: 800;
+    font-size: 14px;
+  
+    color: rgba(226,232,240,0.85);
+    text-decoration: none;
+  
+    border: 1px solid transparent;
+    background: transparent;
+  
+    transition:
+      background var(--t),
+      border-color var(--t),
+      color var(--t),
+      transform var(--t);
+  }
+  .nav:hover{
+    background: rgba(99,102,241,0.16);
+    color: #e0e7ff;
+  }
+  .nav--active{
+    background: linear-gradient(180deg, rgba(99,102,241,0.28), rgba(99,102,241,0.18));
+    border-color: rgba(99,102,241,0.45);
+    color: #ffffff;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.06),
+      0 6px 18px rgba(99,102,241,0.35);
+  }
+  
+  .content{
+    flex:1;
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 900px){
+    .body{ flex-direction: column; }
+    .sidebar{
+      width: 100%;
+      flex-direction: row;
+      overflow-x: auto;
+      border-right: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .nav{ white-space: nowrap; }
+  }
+  
+  /* ---------------------------------------------------------
+     CARDS
+  --------------------------------------------------------- */
+  .card{
+    position: relative;
+    background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+  }
+  
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius: inherit;
+    background: radial-gradient(600px 200px at 15% 0%, rgba(99,102,241,0.20), transparent 55%);
+    pointer-events:none;
+  }
+  
+  .card:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(99,102,241,0.45);
+  }
+  
+  .card > *{ position: relative; }
+  
+  /* ---------------------------------------------------------
+     KPI
+  --------------------------------------------------------- */
+  .kpi{ font-size: 30px; font-weight: 950; }
+  .kpi-sub{ font-size: 12px; color: var(--muted); }
+  
+  /* ---------------------------------------------------------
+     BUTTONS
+  --------------------------------------------------------- */
+  .btn{
+    border: 1px solid rgba(99,102,241,0.45);
+    background: linear-gradient(180deg, #6366f1, #4f46e5);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-weight: 900;
+    cursor:pointer;
+    box-shadow: 0 10px 26px rgba(79,70,229,0.35);
+    transition: transform var(--t), filter var(--t), box-shadow var(--t);
+  }
+  
+  .btn:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow: 0 16px 38px rgba(79,70,229,0.45);
+  }
+  .btn:active{ transform:none; }
+  
+  .btn--ghost{
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow:none;
+  }
+  .btn--ghost:hover{ background: rgba(255,255,255,0.06); }
+  
+  .btn--soft{
+    background: rgba(99,102,241,0.12);
+    border-color: rgba(99,102,241,0.22);
+    color: #c7d2fe;
+    box-shadow:none;
+  }
+  
+  .btn--danger{
+    background: linear-gradient(180deg, #ef4444, #b91c1c);
+    border-color: rgba(239,68,68,0.55);
+  }
+  
+  /* ---------------------------------------------------------
+     INPUTS
+  --------------------------------------------------------- */
+  .input, .select, .textarea{
+    width:100%;
+    padding: 11px 12px;
+    border-radius: 14px;
+    border:1px solid var(--border);
+    background: rgba(0,0,0,0.35);
+    color: var(--text);
+    outline:none;
+    transition: border-color var(--t), box-shadow var(--t), filter var(--t);
+  }
+  
+  .input::placeholder, .textarea::placeholder{ color: var(--muted); }
+  
+  .input:focus, .select:focus, .textarea:focus{
+    border-color: rgba(99,102,241,0.65);
+    box-shadow: var(--ring);
+  }
+  
+  .textarea{ min-height:120px; resize:vertical; }
+  
+  .label{
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: #c7d2fe;
+  }
+  
+  .field{ margin-bottom: 12px; }
+  
+  /* ---------------------------------------------------------
+     TABLES
+  --------------------------------------------------------- */
+  .table{
+    width:100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 14px;
+    overflow:hidden;
+  }
+  
+  .table thead th{
+    padding: 12px;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.06);
+    border-bottom:1px solid var(--border);
+    color: #c7d2fe;
+  }
+  
+  .table td{
+    padding: 12px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  
+  .table tbody tr:hover{ background: rgba(99,102,241,0.12); }
+  
+  /* ---------------------------------------------------------
+     BADGES
+  --------------------------------------------------------- */
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 900;
+    border:1px solid var(--border);
+    background: rgba(255,255,255,0.06);
+  }
+  
+  .badge--good{
+    background: rgba(34,197,94,0.18);
+    border-color: rgba(34,197,94,0.45);
+    color: #bbf7d0;
+  }
+  .badge--warn{
+    background: rgba(245,158,11,0.20);
+    border-color: rgba(245,158,11,0.45);
+    color: #fde68a;
+  }
+  .badge--bad{
+    background: rgba(239,68,68,0.20);
+    border-color: rgba(239,68,68,0.45);
+    color: #fecaca;
+  }
+  .badge--neutral{
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+  }
+  
+  /* ---------------------------------------------------------
+     MODAL (matches your Modal.css classes)
+  --------------------------------------------------------- */
+  .modalOverlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.60);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 18px;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  
+  .modal{
+    width: min(720px, 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  
+  .modal__head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.18);
+  }
+  
+  .modal__title{ font-weight: 950; letter-spacing: .01em; }
+  .modal__body{ padding: 16px; }
+  .modal__foot{
+    padding: 14px 16px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display:flex;
+    justify-content:flex-end;
+    gap: 10px;
+    background: rgba(0,0,0,0.12);
+  }
+  
+  /* ---------------------------------------------------------
+     RESPONSIVE (tables stack)
+  --------------------------------------------------------- */
+  @media (max-width: 720px){
+    .card{ padding: 14px; border-radius: 18px; }
+    .col{ min-width:100%; }
+  
+    .table thead{ display:none; }
+    .table, .table tbody, .table tr, .table td{ display:block; }
+    .table tr{
+      margin-bottom: 12px;
+      border:1px solid var(--border);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    .table td{
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+  }
+  
+  /* =========================================================
+     >>> CATALOGOS (NO TOCAR)
+     (Se deja tal cual, solo organizado)
+     ========================================================= */
+  
+  .table--catalog .thumbBtn{
+    display:inline-flex;
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    cursor:pointer;
+    transition: transform var(--t), background var(--t), border-color var(--t);
+  }
+  .table--catalog .thumbBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(99,102,241,0.12);
+    border-color: rgba(99,102,241,0.45);
+  }
+  .table--catalog .thumbImg{
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 14px;
+    display:block;
+  }
+  .thumbEmpty{
+    width: 96px;
+    height: 96px;
+    border-radius: 16px;
+    border: 1px dashed rgba(255,255,255,0.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(0,0,0,0.16);
+  }
+  
+  /* modal grid */
+  .catalogEditGrid{
+    display:grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+  }
+  @media (max-width: 900px){
+    .catalogEditGrid{ grid-template-columns: 1fr; }
+  }
+  .previewBig{
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+  .previewEmpty{
+    height: 340px;
+    border-radius: 18px;
+    border: 1px dashed rgba(255,255,255,0.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: rgba(255,255,255,0.55);
+    font-weight: 900;
+    background: rgba(0,0,0,0.16);
+  }
+  
+  .checkRow{ display:flex; gap: 10px; align-items:center; }
+  
+  /* lightbox */
+  .imgLightbox{
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.70);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 18px;
+    z-index: 80;
+  }
+  .imgLightbox__inner{
+    width: min(980px, 100%);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+    box-shadow: 0 40px 100px rgba(0,0,0,0.65);
+    overflow: hidden;
+  }
+  .imgLightbox__head{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.22);
+  }
+  .imgLightbox__body{ padding: 16px; }
+  .imgLightbox__img{
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.25);
+  }
+  .thumbImg--lg{
+    width: 132px;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 16px;
+    display:block;
+  }
+  
+  .thumbEmpty--lg{
+    width: 132px;
+    height: 92px;
+    border-radius: 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .table--catalog td{ vertical-align: middle; }
+  
+  .thumbBtn{
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .thumbImg{
+    display:block;
+    width: 140px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--t);
+  }
+  .thumbBtn:hover .thumbImg{
+    transform: scale(1.02);
+  }
+  
+  .thumbEmpty{
+    width: 140px;
+    height: 96px;
+    border-radius: 16px;
+    border: 1px dashed var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  
+  .catalogEditGrid{
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+  }
+  
+  .previewBig{
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  
+  .previewEmpty{
+    height: 320px;
+    border-radius: 18px;
+    border: 1px dashed var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--muted);
+  }
+  
+  .imgLightbox{
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 18px;
+    background: rgba(2,6,23,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .imgLightbox__inner{
+    width: min(980px, 100%);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.22);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .imgLightbox__head{
+    padding: 14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .imgLightbox__body{
+    padding: 16px;
+  }
+  .imgLightbox__img{
+    width: 100%;
+    height: min(70vh, 640px);
+    object-fit: contain;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.35);
+  }
+  
+  .checkRow{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  
+  @media (max-width: 900px){
+    .catalogEditGrid{
+      grid-template-columns: 1fr;
+    }
+    .previewBig, .previewEmpty{
+      height: 260px;
+    }
+  }
+  /* Opcional: paginación más alineada */
+  .table--catalog td { vertical-align: middle; }
+  
+  
+  /* =========================================================
+   >>> PEDIDOS / EDITAR PEDIDO (CORREGIDO) — FINAL
+   - Sin blanco
+   - Modal “ancho” para Editar pedido (wrapper .pedidoModalWide)
+   - Grid tipo tabla (LinesGridView) estable (4 o 5 columnas)
+   - Sin “encimarse”
+   - Sin saltos raros (cajeta/avion/vaqueros)
+   ========================================================= */
+
+/* Bloqueo scroll body cuando hay modal */
+body.modal-open{
+  overflow: hidden;
+}
+
+/* Overlay un poco más “pro” */
+.modalOverlay{
+  background:
+    radial-gradient(900px 600px at 20% 10%, rgba(99,102,241,0.18), transparent 55%),
+    radial-gradient(900px 700px at 90% 20%, rgba(34,211,238,0.12), transparent 60%),
+    rgba(2,6,23,0.78) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Modal base (oscuro, sin blanco) */
+.modal{
+  background: linear-gradient(180deg, rgba(15,18,30,0.96), rgba(9,12,22,0.94)) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: 0 40px 110px rgba(0,0,0,0.70) !important;
+}
+
+/* Head/foot */
+.modal__head{
+  background: rgba(0,0,0,0.22) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+}
+.modal__body{
+  background: rgba(0,0,0,0.06) !important;
+}
+.modal__foot{
+  background: rgba(0,0,0,0.18) !important;
+  border-top: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* Inputs dentro del modal (oscuro, consistente) */
+.modal .input,
+.modal .select,
+.modal .textarea{
+  background: rgba(0,0,0,0.38) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+.modal .input:focus,
+.modal .select:focus,
+.modal .textarea:focus{
+  border-color: rgba(99,102,241,0.65) !important;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.20) !important;
+}
+
+/* ====== MODAL MÁS ANCHO (sin tocar Modal.tsx) ======
+   ✅ Requiere que envuelvas el contenido del modal con:
+   <div className="pedidoModalWide"> ... </div>
+*/
+.pedidoModalWide{
+  width: min(1380px, 98vw);
+}
+
+/* ===== FULLSCREEN SOLO PARA "Editar pedido" =====
+   (tu Modal no trae className, así que lo hacemos por el contenido) */
+.pedidoFull{
+  display:grid;
+  grid-template-columns: 0.90fr 1.35fr; /* ✅ derecha más ancha para ver Suela/Modelo */
+  gap: 14px;
+  min-height: calc(100vh - 210px);
+}
+
+/* Panels */
+.pedidoFull__left,
+.pedidoFull__right{
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+  padding: 14px;
+  min-width: 0; /* evita overflow/encimado */
+}
+
+/* Textarea: ahora “Comentarios” y MÁS corto */
+.pedidoTextEdit--short{
+  min-height: 140px !important;
+  max-height: 220px;
+  resize: vertical;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+/* Responsive editor */
+@media (max-width: 980px){
+  .pedidoModalWide{ width: min(980px, 98vw); }
+  .pedidoFull{ grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   TABLA DE LÍNEAS (si vuelves a usar <table> real) — FIX “ENCIMADA”
+   ========================================================= */
+
+.linesBox{
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.linesBox__head{
+  padding: 10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  background: rgba(0,0,0,0.22);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.linesBox__title{
+  font-weight: 950;
+  color: rgba(241,245,249,0.92);
+}
+
+.linesBox__body{
+  max-height: calc(100vh - 360px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.linesTable{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.linesTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(9,12,22,0.98);
+  color: #c7d2fe;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.linesTable td{
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+
+  color: rgba(226,232,240,0.92);
+}
+.linesTable tbody tr:nth-child(2n){
+  background: rgba(255,255,255,0.015);
+}
+.linesTable tbody tr:hover{
+  background: rgba(99,102,241,0.10);
+}
+.linesColNum{ width: 92px; }
+.linesColColor{ width: 180px; }
+.linesColSuela{ width: 180px; }
+.linesColModelo{ width: auto; }
+
+.linesTable td.modeloCell{
+  font-weight: 900;
+  color: rgba(241,245,249,0.96);
+}
+
+@media (max-width: 720px){
+  .linesBox__body{ max-height: 52vh; }
+  .linesTable thead th{ font-size: 11px; }
+}
+
+/* Anti CSS global raro (si algo puso display:flex en td/th) */
+.linesTable td,
+.linesTable th{
+  display: table-cell !important;
+}
+
+/* =========================================================
+   >>> PEDIDOS (EXTRA) — Vista previa + Texto plano + Grid table
+   (Para tu TSX actual con LinesGridView)
+   ========================================================= */
+
+/* Header de Pedidos */
+.ordersHeader{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.ordersHeader__left{ min-width: 240px; }
+.ordersHeader__actions{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap: wrap;
+}
+
+/* Tabla principal wrapper */
+.tableWrap{
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 14px;
+}
+
+/* ---- Expand card (vista previa) ---- */
+.orderExpandRow td{
+  padding: 0;
+  border-bottom: 0;
+}
+
+.orderExpandCard{
+  margin: 10px 0 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+
+.orderExpandTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px 10px;
+  background: rgba(0,0,0,0.18);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.orderExpandTitle{
+  font-weight: 950;
+  font-size: 14px;
+  letter-spacing: .2px;
+}
+
+/* Grid dentro del expand (texto + tabla) */
+.orderExpandGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+@media (max-width: 980px){
+  .orderExpandGrid{ grid-template-columns: 1fr; }
+}
+
+/* ---- Texto plano (vista previa) ---- */
+.orderTextArea{
+  min-height: 320px;
+  resize: vertical;
+  line-height: 1.55;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12.8px;
+  letter-spacing: 0.2px;
+
+  background: rgba(0,0,0,0.38);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+.orderTextArea:focus{
+  border-color: rgba(99,102,241,0.65);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.18);
+}
+
+/* =========================================================
+   LinesGridView — FIX DEFINITIVO (4 o 5 columnas SIN romper)
+   ========================================================= */
+
+.linesPanel{
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  background: rgba(0,0,0,0.18);
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(0,0,0,0.25);
+}
+
+.linesPanel__head{
+  padding: 10px 12px;
+  font-weight: 950;
+  letter-spacing: .2px;
+  background: rgba(0,0,0,0.22);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.linesListScroll{
+  max-height: 52vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.linesListScroll--modal{
+  max-height: calc(100vh - 330px);
+}
+
+/* Base: 4 columnas */
+.linesGrid{
+  display: grid;
+  gap: 0;
+  grid-template-columns: 120px 180px 180px minmax(220px, 1fr);
+}
+
+/* Con índice: 5 columnas (# + 4 campos) */
+.linesGrid.linesGrid--withIndex{
+  grid-template-columns: 64px 120px 180px 180px minmax(260px, 1fr);
+}
+
+/* Headers */
+.linesGrid__hdr{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  padding: 10px 12px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+
+  background: rgba(9,12,22,0.98);
+  color: #c7d2fe;
+
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Última columna sin borde derecho (headers) */
+.linesGrid:not(.linesGrid--withIndex) .linesGrid__hdr:nth-child(4n){
+  border-right: 0;
+}
+.linesGrid.linesGrid--withIndex .linesGrid__hdr:nth-child(5n){
+  border-right: 0;
+}
+
+/* Celdas */
+.linesCell{
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+
+  min-width: 0;
+}
+
+/* Última columna sin borde derecho (celdas) */
+.linesGrid:not(.linesGrid--withIndex) .linesCell:nth-child(4n){
+  border-right: 0;
+}
+.linesGrid.linesGrid--withIndex .linesCell:nth-child(5n){
+  border-right: 0;
+}
+
+.linesCell--strong{
+  font-weight: 900;
+  color: rgba(241,245,249,0.94);
+}
+.linesCell--muted{
+  color: rgba(226,232,240,0.86);
+}
+
+/* Índice (#) */
+.linesHdrIndex{ text-align: center; }
+.linesCell--index{
+  text-align: center;
+  font-weight: 950;
+  color: rgba(199,210,254,0.92);
+  background: rgba(99,102,241,0.10);
+}
+
+/* STRIPING correcto:
+   - 4 cols: 4 headers + filas de 4 => patrón 8 (2 filas)
+   - 5 cols: 5 headers + filas de 5 => patrón 10 (2 filas)
+*/
+.linesGrid:not(.linesGrid--withIndex) > .linesCell:nth-child(8n + 5),
+.linesGrid:not(.linesGrid--withIndex) > .linesCell:nth-child(8n + 6),
+.linesGrid:not(.linesGrid--withIndex) > .linesCell:nth-child(8n + 7),
+.linesGrid:not(.linesGrid--withIndex) > .linesCell:nth-child(8n + 8){
+  background: rgba(255,255,255,0.015);
+}
+
+.linesGrid.linesGrid--withIndex > .linesCell:nth-child(10n + 6),
+.linesGrid.linesGrid--withIndex > .linesCell:nth-child(10n + 7),
+.linesGrid.linesGrid--withIndex > .linesCell:nth-child(10n + 8),
+.linesGrid.linesGrid--withIndex > .linesCell:nth-child(10n + 9),
+.linesGrid.linesGrid--withIndex > .linesCell:nth-child(10n + 10){
+  background: rgba(255,255,255,0.015);
+}
+
+/* Responsive: móvil apilado */
+@media (max-width: 820px){
+  .linesGrid,
+  .linesGrid.linesGrid--withIndex{
+    grid-template-columns: 1fr !important;
+  }
+  .linesGrid__hdr{
+    display:none;
+  }
+  .linesCell{
+    border-right: 0;
+    white-space: normal;
+  }
+}
+
+/* =========================================================
+   (Opcional) tabla <table> wide compatible
+   ========================================================= */
+.ordersLinesWrapWide{
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.18);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.ordersLinesTableWide{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.ordersLinesTableWide thead th{
+  background: rgba(9,12,22,0.98);
+  color: #c7d2fe;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.ordersLinesTableWide td{
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ordersModelCellWide{ font-weight: 900; }
+
+/* =========================================================
+   FIX: si tu responsive general convierte td en display:flex,
+   NO lo haga para la tabla principal de pedidos.
+   ========================================================= */
+@media (max-width: 720px){
+  .table.table--orders thead{ display: table-header-group !important; }
+  .table.table--orders tbody,
+  .table.table--orders tr,
+  .table.table--orders td,
+  .table.table--orders th{
+    display: table-cell !important;
+  }
+  .table.table--orders tr{ display: table-row !important; }
+}
+/* =========================================================
+   >>> EXTRA — Checks por línea + Completar pedido
+   (NO rompe el grid, solo agrega columna de check y estilos)
+   ========================================================= */
+
+/* Mini texto de progreso bajo folio */
+.ordersProgressText{
+  margin-top: 4px;
+  opacity: .85;
+}
+
+/* Cuando ya está todo listo */
+.ordersDoneAll{
+  color: rgba(34,211,238,0.95);
+}
+
+/* Head de LinesPanel con acciones */
+.linesPanel__head--checks{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.linesPanel__title{
+  font-weight: 950;
+}
+.linesPanel__meta{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.linesProgress{
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.16);
+  font-weight: 900;
+  font-size: 12px;
+}
+.linesProgress--done{
+  border-color: rgba(34,211,238,0.35);
+  background: rgba(34,211,238,0.10);
+  color: rgba(34,211,238,0.95);
+}
+
+/* Botones XS (si no existen en tu diseño) */
+.btn--xs{
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 12px;
+}
+
+/* ===== Grid con checks/índice =====
+   Si hay checks o índice, usamos "withIndex" para meter columnas extra.
+   IMPORTANTE: aquí definimos el grid correcto para 6 columnas:
+   [check] [#] [numero] [color] [suela] [modelo]
+*/
+.linesGrid.linesGrid--withChecks{
+  grid-template-columns: 56px 64px 120px 180px 180px minmax(260px, 1fr);
+}
+
+/* Si solo hay índice (sin check), conserva tu 5 columnas */
+.linesGrid.linesGrid--withIndex:not(.linesGrid--withChecks){
+  grid-template-columns: 64px 120px 180px 180px minmax(260px, 1fr);
+}
+
+/* Header de check centrado */
+.linesHdrCheck{
+  text-align:center;
+}
+
+/* Celda check */
+.linesCell--check{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Checkbox UI pro */
+.linesCheck{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  position: relative;
+}
+.linesCheck input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.linesCheck__ui{
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(0,0,0,0.20);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+.linesCheck input:checked + .linesCheck__ui{
+  border-color: rgba(34,211,238,0.45);
+  background: rgba(34,211,238,0.20);
+  box-shadow: 0 0 0 4px rgba(34,211,238,0.12);
+}
+
+/* Línea marcada como done: baja opacidad + tachado sutil */
+.linesCell.is-done{
+  opacity: 0.70;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255,255,255,0.22);
+}
+
+/* Responsive: en pantallas medianas compacta columnas sin romper */
+@media (max-width: 1100px){
+  .linesGrid.linesGrid--withChecks{
+    grid-template-columns: 52px 56px 110px 150px 150px minmax(220px, 1fr);
+  }
+  .linesGrid.linesGrid--withIndex:not(.linesGrid--withChecks){
+    grid-template-columns: 56px 110px 150px 150px minmax(220px, 1fr);
+  }
+}
+
+/* Mobile: apila como ya tienes */
+@media (max-width: 820px){
+  .linesGrid.linesGrid--withChecks,
+  .linesGrid.linesGrid--withIndex{
+    grid-template-columns: 1fr !important;
+  }
+  .linesCell.is-done{
+    text-decoration: none; /* en móvil puede verse feo apilado */
+    opacity: 1;
+  }
+}
+/* =========================================================
+   >>> CATALOGO DE MODELOS — TABLA + PARES (STOCK)
+   ========================================================= */
+
+/* Tabla catálogo */
+.table--catalog{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* Head */
+.table--catalog thead th{
+  background: rgba(9,12,22,0.98);
+  color: #c7d2fe;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Body */
+.table--catalog td{
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  vertical-align: middle;
+
+  /* evita textos raros */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Filas alternadas */
+.table--catalog tbody tr:nth-child(2n){
+  background: rgba(255,255,255,0.02);
+}
+
+.table--catalog tbody tr:hover{
+  background: rgba(99,102,241,0.08);
+}
+
+/* =========================================================
+   COLUMNA PARES
+   ========================================================= */
+
+.thPares{
+  width: 200px;
+  text-align: center;
+}
+
+.pairsCell{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Input pares */
+.pairsInput{
+  width: 100px;
+  padding: 6px 8px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 14px;
+
+  background: rgba(0,0,0,0.45);
+  color: #e5e7eb;
+
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.pairsInput:focus{
+  outline: none;
+  border-color: rgba(99,102,241,0.7);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.22);
+}
+
+/* Badge debajo del input */
+.pairsBadge{
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  background: rgba(99,102,241,0.18);
+  color: #c7d2fe;
+}
+
+.pairsBadge--zero{
+  background: rgba(239,68,68,0.20);
+  color: #fecaca;
+}
+
+/* =========================================================
+   IMÁGENES EN TABLA
+   ========================================================= */
+
+.thumbBtn{
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: zoom-in;
+}
+
+.thumbImg--xl{
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.16);
+}
+
+.thumbEmpty--xl{
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+
+/* =========================================================
+   MODAL EDICIÓN MODELO
+   ========================================================= */
+
+.catalogEditGrid{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+
+@media (max-width: 900px){
+  .catalogEditGrid{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Preview imagen grande */
+.previewBig{
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.previewEmpty{
+  height: 240px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.45);
+  font-weight: 900;
+}
+
+/* =========================================================
+   LIGHTBOX IMÁGENES
+   ========================================================= */
+
+.imgLightbox{
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imgLightbox__inner{
+  width: min(900px, 96vw);
+  background: rgba(9,12,22,0.95);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.16);
+  overflow: hidden;
+}
+
+.imgLightbox__head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.imgLightbox__body{
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.imgLightbox__img{
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 16px;
+  object-fit: contain;
+}
+
+/* =========================================================
+   FIXES CONTRA CSS GLOBAL RARO
+   ========================================================= */
+
+.table--catalog td,
+.table--catalog th{
+  display: table-cell !important;
+}
+
+@media (max-width: 720px){
+  .table--catalog thead{
+    display: table-header-group !important;
+  }
+}
+/* =========================================================
+   FIX: No convertir la tabla del catálogo a "cards" en móvil
+   ========================================================= */
+   @media (max-width: 720px){
+    .table.table--catalog{
+      display: table !important;
+    }
+    .table.table--catalog thead{
+      display: table-header-group !important;
+    }
+    .table.table--catalog tbody{
+      display: table-row-group !important;
+    }
+    .table.table--catalog tr{
+      display: table-row !important;
+      border: 0 !important;
+      margin: 0 !important;
+    }
+    .table.table--catalog th,
+    .table.table--catalog td{
+      display: table-cell !important;
+    }
+  }
+  

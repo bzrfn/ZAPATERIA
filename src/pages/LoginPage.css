@@ -1,0 +1,245 @@
+/* =========================================================
+   LoginPage — Dark Premium / Neon UI
+   (no libs, only CSS)
+   ========================================================= */
+
+   :root{
+    --lp-bg: #070A12;
+    --lp-surface: rgba(255,255,255,0.06);
+    --lp-surface2: rgba(255,255,255,0.09);
+    --lp-border: rgba(255,255,255,0.12);
+    --lp-text: rgba(255,255,255,0.92);
+    --lp-muted: rgba(255,255,255,0.62);
+  
+    --lp-a: #7c3aed;  /* violet */
+    --lp-b: #22d3ee;  /* cyan */
+    --lp-c: #10b981;  /* green */
+    --lp-d: #f43f5e;  /* rose */
+  
+    --lp-shadow: 0 22px 60px rgba(0,0,0,0.55);
+    --lp-radius: 22px;
+  }
+  
+  /* FULL BACKGROUND */
+  .loginWrap{
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    color: var(--lp-text);
+  
+    /* dark base + subtle noise effect imitation via gradients */
+    background:
+      radial-gradient(1200px 700px at 10% 15%, rgba(124,58,237,0.26), transparent 60%),
+      radial-gradient(900px 600px at 90% 10%, rgba(34,211,238,0.22), transparent 58%),
+      radial-gradient(900px 600px at 55% 90%, rgba(16,185,129,0.14), transparent 60%),
+      linear-gradient(180deg, #050712, #070A12 35%, #060813);
+  }
+  
+  /* “mesh blobs” */
+  .loginWrap::before{
+    content:"";
+    position:absolute;
+    inset:-120px;
+    background:
+      radial-gradient(closest-side at 20% 35%, rgba(124,58,237,0.18), transparent 65%),
+      radial-gradient(closest-side at 75% 25%, rgba(34,211,238,0.16), transparent 65%),
+      radial-gradient(closest-side at 55% 80%, rgba(244,63,94,0.10), transparent 60%);
+    filter: blur(18px);
+    opacity: .9;
+    pointer-events:none;
+  }
+  
+  /* “glow line” grid illusion */
+  .loginWrap::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 70%);
+    opacity: .35;
+    pointer-events:none;
+  }
+  
+  /* MAIN CARD */
+  .loginCard{
+    width: min(560px, 100%);
+    position: relative;
+    z-index: 1;
+    padding: 18px;
+  
+    border-radius: var(--lp-radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+    border: 1px solid var(--lp-border);
+    box-shadow: var(--lp-shadow);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow: hidden;
+  }
+  
+  /* Neon border effect */
+  .loginCard::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: calc(var(--lp-radius) + 2px);
+    background: conic-gradient(
+      from 210deg,
+      rgba(124,58,237,0.0),
+      rgba(124,58,237,0.55),
+      rgba(34,211,238,0.55),
+      rgba(16,185,129,0.45),
+      rgba(244,63,94,0.40),
+      rgba(124,58,237,0.55),
+      rgba(124,58,237,0.0)
+    );
+    filter: blur(10px);
+    opacity: .55;
+    pointer-events:none;
+  }
+  
+  /* Inner highlight */
+  .loginCard::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius: var(--lp-radius);
+    background: radial-gradient(700px 220px at 20% 0%, rgba(34,211,238,0.12), transparent 55%);
+    pointer-events:none;
+  }
+  
+  .loginCard > *{ position: relative; }
+  
+  /* Titles */
+  .loginCard h1{
+    margin: 0 0 6px 0;
+    font-size: 26px;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+  }
+  .loginCard .small{
+    color: var(--lp-muted);
+  }
+  
+  /* Separator */
+  .loginCard .sep{
+    border:0;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    margin: 14px 0;
+  }
+  
+  /* Labels */
+  .loginCard .label{
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.68);
+    margin-bottom: 6px;
+  }
+  
+  /* Inputs */
+  .loginCard .input{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.28);
+    color: var(--lp-text);
+    outline: none;
+    transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+  }
+  .loginCard .input::placeholder{ color: rgba(255,255,255,0.40); }
+  .loginCard .input:focus{
+    border-color: rgba(34,211,238,0.45);
+    box-shadow: 0 0 0 4px rgba(34,211,238,0.16);
+  }
+  
+  /* Button — premium gradient */
+  .loginCard .btn{
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-weight: 950;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.95);
+  
+    background: linear-gradient(90deg, rgba(124,58,237,1), rgba(34,211,238,1));
+    box-shadow:
+      0 18px 38px rgba(124,58,237,0.22),
+      0 18px 38px rgba(34,211,238,0.16);
+    transition: transform 160ms ease, filter 160ms ease, box-shadow 220ms ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .loginCard .btn:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow:
+      0 24px 55px rgba(124,58,237,0.26),
+      0 24px 55px rgba(34,211,238,0.20);
+  }
+  .loginCard .btn:active{
+    transform: translateY(0px);
+    filter: brightness(0.98);
+  }
+  .loginCard .btn:focus-visible{
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(124,58,237,0.22), 0 0 0 8px rgba(34,211,238,0.12);
+  }
+  
+  /* Button shimmer */
+  .loginCard .btn::before{
+    content:"";
+    position:absolute;
+    top:-40%;
+    left:-60%;
+    width: 60%;
+    height: 180%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: rotate(18deg);
+    opacity: .55;
+    transition: left 700ms ease;
+  }
+  .loginCard .btn:hover::before{
+    left: 120%;
+  }
+  
+  /* Error */
+  .error{
+    background: rgba(244,63,94,0.10);
+    border: 1px solid rgba(244,63,94,0.24);
+    padding: 12px 12px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.92);
+    box-shadow: 0 14px 30px rgba(244,63,94,0.10);
+  }
+  
+  /* Hint */
+  .hint{
+    margin-top: 14px;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.22);
+  }
+  
+  /* Tight spacing */
+  .field{ margin-bottom: 12px; }
+  
+  /* Responsive */
+  @media (max-width: 520px){
+    .loginCard{ padding: 14px; border-radius: 18px; }
+    .loginCard h1{ font-size: 22px; }
+  }
+  
