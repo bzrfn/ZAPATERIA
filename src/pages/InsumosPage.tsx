@@ -18,8 +18,8 @@ export default function InsumosPage() {
 
   const filtered = useMemo(() => {
     const qq = q.trim().toLowerCase()
-    return state.supplies.filter(s =>
-      !qq || s.nombre.toLowerCase().includes(qq) || s.key.toLowerCase().includes(qq),
+    return state.supplies.filter(
+      (s) => !qq || s.nombre.toLowerCase().includes(qq) || s.key.toLowerCase().includes(qq),
     )
   }, [state.supplies, q])
 
@@ -52,7 +52,9 @@ export default function InsumosPage() {
         </div>
         <div className="actions">
           <input className="input" placeholder="Buscar…" value={q} onChange={(e) => setQ(e.target.value)} />
-          <button className="btn" onClick={openCreate}>Nuevo insumo</button>
+          <button className="btn" onClick={openCreate}>
+            Nuevo insumo
+          </button>
         </div>
       </div>
 
@@ -69,7 +71,7 @@ export default function InsumosPage() {
           </tr>
         </thead>
         <tbody>
-          {filtered.map(s => {
+          {filtered.map((s) => {
             const tone = s.stock <= s.minStock ? (s.stock === 0 ? 'bad' : 'warn') : 'good'
             return (
               <tr key={s.id}>
@@ -78,13 +80,21 @@ export default function InsumosPage() {
                   <div className="small">{s.key}</div>
                 </td>
                 <td>{s.unidad}</td>
-                <td><Badge tone={tone as any}>{s.stock}</Badge></td>
+                <td>
+                  <Badge tone={tone as any}>{s.stock}</Badge>
+                </td>
                 <td>{s.minStock}</td>
                 <td>
                   <div className="actions">
-                    <button className="btn btn--soft" onClick={() => openAdjust(s)}>Agregar / Restar</button>
-                    <button className="btn btn--ghost" onClick={() => openEdit(s)}>Editar</button>
-                    <button className="btn btn--danger" onClick={() => remove(s.id)}>Eliminar</button>
+                    <button className="btn btn--soft" onClick={() => openAdjust(s)}>
+                      Agregar / Restar
+                    </button>
+                    <button className="btn btn--ghost" onClick={() => openEdit(s)}>
+                      Editar
+                    </button>
+                    <button className="btn btn--danger" onClick={() => remove(s.id)}>
+                      Eliminar
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -104,17 +114,16 @@ export default function InsumosPage() {
         }}
       />
 
-      <AjusteStockModal
-        open={adjustOpen}
-        onClose={() => setAdjustOpen(false)}
-        item={adjustItem}
-      />
+      <AjusteStockModal open={adjustOpen} onClose={() => setAdjustOpen(false)} item={adjustItem} />
     </div>
   )
 }
 
 function InsumoModal({
-  open, onClose, edit, onSave,
+  open,
+  onClose,
+  edit,
+  onSave,
 }: {
   open: boolean
   onClose: () => void
@@ -145,7 +154,9 @@ function InsumoModal({
       onClose={onClose}
       footer={
         <>
-          <button className="btn btn--ghost" onClick={onClose}>Cancelar</button>
+          <button className="btn btn--ghost" onClick={onClose}>
+            Cancelar
+          </button>
           <button className="btn" onClick={() => onSave({ nombre, unidad, key, minStock, costoUnitario, notas })}>
             Guardar
           </button>
@@ -182,20 +193,36 @@ function InsumoModal({
           <div className="field">
             <div className="label">Unidad</div>
             <select className="select" value={unidad} onChange={(e) => setUnidad(e.target.value as Unit)}>
-              {UNITS.map(u => <option key={u} value={u}>{u}</option>)}
+              {UNITS.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
             </select>
           </div>
         </div>
         <div className="col">
           <div className="field">
             <div className="label">Stock mínimo (alerta)</div>
-            <input className="input" type="number" min={0} value={minStock} onChange={(e) => setMinStock(Number(e.target.value))} />
+            <input
+              className="input"
+              type="number"
+              min={0}
+              value={minStock}
+              onChange={(e) => setMinStock(Number(e.target.value))}
+            />
           </div>
         </div>
         <div className="col">
           <div className="field">
             <div className="label">Costo unitario (opcional)</div>
-            <input className="input" type="number" min={0} value={costoUnitario} onChange={(e) => setCostoUnitario(Number(e.target.value))} />
+            <input
+              className="input"
+              type="number"
+              min={0}
+              value={costoUnitario}
+              onChange={(e) => setCostoUnitario(Number(e.target.value))}
+            />
           </div>
         </div>
       </div>
@@ -208,7 +235,15 @@ function InsumoModal({
   )
 }
 
-function AjusteStockModal({ open, onClose, item }: { open: boolean, onClose: () => void, item: Supply | null }) {
+function AjusteStockModal({
+  open,
+  onClose,
+  item,
+}: {
+  open: boolean
+  onClose: () => void
+  item: Supply | null
+}) {
   const { dispatch } = useApp()
   const [qty, setQty] = useState<number>(1)
 
@@ -218,42 +253,57 @@ function AjusteStockModal({ open, onClose, item }: { open: boolean, onClose: () 
   }, [open])
 
   if (!item) return null
+  const it = item // ✅ FIX TS: aquí ya no es null
 
   function add(n: number) {
-    dispatch({ type: 'SUPPLY_ADJUST', id: item.id, delta: n })
+    dispatch({ type: 'SUPPLY_ADJUST', id: it.id, delta: n })
   }
 
   function sub(n: number) {
-    dispatch({ type: 'SUPPLY_ADJUST', id: item.id, delta: -n })
+    dispatch({ type: 'SUPPLY_ADJUST', id: it.id, delta: -n })
   }
 
   return (
     <Modal
-      title={`Ajuste de stock — ${item.nombre}`}
+      title={`Ajuste de stock — ${it.nombre}`}
       open={open}
       onClose={onClose}
       footer={
         <>
-          <button className="btn btn--ghost" onClick={onClose}>Cerrar</button>
+          <button className="btn btn--ghost" onClick={onClose}>
+            Cerrar
+          </button>
         </>
       }
     >
       <div className="row">
         <div className="col">
           <div className="card" style={{ background: 'rgba(0,0,0,0.02)', borderStyle: 'dashed', boxShadow: 'none' }}>
-            <div style={{ fontWeight: 900, fontSize: 24 }}>{item.stock} <span className="small">{item.unidad}</span></div>
+            <div style={{ fontWeight: 900, fontSize: 24 }}>
+              {it.stock} <span className="small">{it.unidad}</span>
+            </div>
             <div className="small">Stock actual</div>
           </div>
         </div>
         <div className="col">
           <div className="field">
             <div className="label">Cantidad</div>
-            <input className="input" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, Number(e.target.value)))} />
+            <input
+              className="input"
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(Math.max(1, Number(e.target.value)))}
+            />
             <div className="small">Usa botones rápidos o aplica la cantidad manual.</div>
           </div>
           <div className="actions">
-            <button className="btn btn--soft" onClick={() => add(qty)}>+ Agregar</button>
-            <button className="btn btn--soft" onClick={() => sub(qty)}>- Restar</button>
+            <button className="btn btn--soft" onClick={() => add(qty)}>
+              + Agregar
+            </button>
+            <button className="btn btn--soft" onClick={() => sub(qty)}>
+              - Restar
+            </button>
           </div>
         </div>
       </div>
@@ -262,11 +312,15 @@ function AjusteStockModal({ open, onClose, item }: { open: boolean, onClose: () 
 
       <div style={{ fontWeight: 900, marginBottom: 8 }}>Atajos</div>
       <div className="actions">
-        {QUICK.map(n => (
-          <button key={n} className="btn btn--soft" onClick={() => add(n)}>+{n}</button>
+        {QUICK.map((n) => (
+          <button key={n} className="btn btn--soft" onClick={() => add(n)}>
+            +{n}
+          </button>
         ))}
-        {QUICK.map(n => (
-          <button key={`s-${n}`} className="btn btn--soft" onClick={() => sub(n)}>-{n}</button>
+        {QUICK.map((n) => (
+          <button key={`s-${n}`} className="btn btn--soft" onClick={() => sub(n)}>
+            -{n}
+          </button>
         ))}
       </div>
 

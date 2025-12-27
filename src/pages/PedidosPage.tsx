@@ -154,8 +154,7 @@ export default function PedidosPage() {
     const allDone = isAllDone(nextLines)
     const forceComplete = !!opts?.forceComplete
 
-    const nextEstado: Order['estado'] =
-      forceComplete || allDone ? 'ENTREGADO' : (order.estado ?? 'REGISTRADO')
+    const nextEstado: Order['estado'] = forceComplete || allDone ? 'ENTREGADO' : (order.estado ?? 'REGISTRADO')
 
     dispatch({
       type: 'ORDER_UPDATE',
@@ -245,11 +244,7 @@ export default function PedidosPage() {
                         <span className="ordersFolioCaret">{isOpen ? '▼' : '▶'}</span>
                         <span className="ordersFolioText">{o.folio}</span>
                       </button>
-                      {linesCount > 0 ? (
-                        <div className="small ordersProgressText">
-                          {doneCount}/{linesCount} listos
-                        </div>
-                      ) : null}
+                      {linesCount > 0 ? <div className="small ordersProgressText">{doneCount}/{linesCount} listos</div> : null}
                     </td>
 
                     <td>{o.fechaIngreso}</td>
@@ -315,7 +310,6 @@ export default function PedidosPage() {
                             <div>
                               <div className="label">Tabla</div>
 
-                              {/* ✅ TABLA CON CHECKS */}
                               <LinesGridView
                                 title="Líneas"
                                 lines={safeLines}
@@ -423,7 +417,6 @@ function PedidoModal({
   }, [open, (edit as any)?.id])
 
   function onTextChange(val: string) {
-    // comentarios: NO obliga a parse
     setTexto(val)
   }
 
@@ -451,7 +444,7 @@ function PedidoModal({
 
     const payload: Partial<Order> = {
       folio,
-      textoOriginal: trimmedText, // ahora son comentarios
+      textoOriginal: trimmedText,
       fechaIngreso,
       fechaEntregaEstimada: fechaEntrega,
       estado: shouldAutoDelivered ? 'ENTREGADO' : estado,
@@ -460,8 +453,6 @@ function PedidoModal({
       lineas: safeLines as any,
     }
 
-    // ✅ si es nuevo y NO trae líneas, intentamos parse final SOLO si viene texto con formato (opcional)
-    // (Si ya no quieres parse nunca, elimina este bloque)
     if (!edit && (safeLines?.length ?? 0) === 0) {
       const parsed = parseOrderText(trimmedText)
       payload.lineas = (parsed as any[]).map((x: any) => ({ ...x, done: false })) as any
@@ -486,7 +477,6 @@ function PedidoModal({
         </>
       }
     >
-      {/* ✅ Wrapper ancho */}
       <div className="pedidoModalWide">
         <div className="pedidoFull">
           <div className="pedidoFull__left">
@@ -567,9 +557,17 @@ function PedidoModal({
   )
 }
 
-/* ---------------- ASIGNAR INSUMOS (SIN CAMBIOS DE LÓGICA) ---------------- */
+/* ---------------- ASIGNAR INSUMOS (FIX TS18047) ---------------- */
 
-function AsignarInsumosModal({ open, onClose, order }: { open: boolean; onClose: () => void; order: Order | null }) {
+function AsignarInsumosModal({
+  open,
+  onClose,
+  order,
+}: {
+  open: boolean
+  onClose: () => void
+  order: Order | null
+}) {
   const { state, dispatch } = useApp()
   const [local, setLocal] = useState<Record<string, number>>({})
 
@@ -579,18 +577,19 @@ function AsignarInsumosModal({ open, onClose, order }: { open: boolean; onClose:
   }, [open, order?.id])
 
   if (!order) return null
+  const o = order // ✅ FIX TS: ya no es null
 
   function save() {
     for (const s of state.supplies) {
       const qty = Number(local[s.id] ?? 0)
-      dispatch({ type: 'ORDER_ASSIGN_SUPPLY', orderId: order.id, supplyId: s.id, qty })
+      dispatch({ type: 'ORDER_ASSIGN_SUPPLY', orderId: o.id, supplyId: s.id, qty })
     }
     onClose()
   }
 
   return (
     <Modal
-      title={`Asignar insumos — ${order.folio}`}
+      title={`Asignar insumos — ${o.folio}`}
       open={open}
       onClose={onClose}
       footer={
@@ -706,11 +705,10 @@ function LinesGridView({
 
       <div className={`linesListScroll ${isModal ? 'linesListScroll--modal' : ''}`}>
         <div
-          className={`linesGrid ${
-            showIndex || showChecks ? 'linesGrid--withIndex' : ''
-          } ${showChecks ? 'linesGrid--withChecks' : ''}`}
+          className={`linesGrid ${showIndex || showChecks ? 'linesGrid--withIndex' : ''} ${
+            showChecks ? 'linesGrid--withChecks' : ''
+          }`}
         >
-          {/* HEADER */}
           {showChecks ? <div className="linesGrid__hdr linesHdrCheck">✓</div> : null}
           {showIndex ? <div className="linesGrid__hdr linesHdrIndex">#</div> : null}
 
@@ -719,7 +717,6 @@ function LinesGridView({
           <div className="linesGrid__hdr">Suela</div>
           <div className="linesGrid__hdr">Modelo</div>
 
-          {/* BODY */}
           {safe.map((l, i) => {
             const rowDone = !!l.done
             return (
@@ -727,11 +724,7 @@ function LinesGridView({
                 {showChecks ? (
                   <div className={`linesCell linesCell--check ${rowDone ? 'is-done' : ''}`}>
                     <label className="linesCheck">
-                      <input
-                        type="checkbox"
-                        checked={rowDone}
-                        onChange={() => onToggleLine?.(i)}
-                      />
+                      <input type="checkbox" checked={rowDone} onChange={() => onToggleLine?.(i)} />
                       <span className="linesCheck__ui" />
                     </label>
                   </div>
